@@ -1,0 +1,326 @@
+body{
+    background: rgb(0,23,36);
+background: linear-gradient(90deg, rgba(0,23,36,1) 0%, rgba(2,105,115,1) 67%, rgba(0,110,159,1) 100%);
+    color: whitesmoke;
+    font-family: "Goudy Bookletter 1911", sans-serif;
+}
+.profile{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pro-detail{
+    height: 100%;
+    width: 50%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10%;
+    padding-top:5% ;
+    padding-bottom: 5%;
+    gap: 10px;
+
+}
+.pro-detail button{
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid rgb(13, 255, 255);
+    background-color: #00ffff;
+    
+}
+.pro-detail button:hover{
+    box-shadow: 0 0 30px 1px #00ffff;
+}
+.pro-img{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+.pro-img span{
+    display: block;
+    width: 200px;
+    height: 200px;
+    border: 3px solid aqua;
+    background-color: rgb(13, 255, 255);
+    border-radius: 100%;
+    box-shadow: 0 0 50px 1px #00ffff;
+    overflow: hidden;
+}
+.pro-img img{
+    width: 250px;
+    position: relative;
+    top: -70px;
+    right: 30px;
+    margin-bottom: 10px;
+}
+.about{
+    padding: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    color: white;
+}
+.skills{
+    padding: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.skills h1{
+    text-align: center;
+    padding-bottom: 5%;
+    color: aliceblue;
+}
+.skill-contain{
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.skill{
+    width: 150px;
+    height: 150px;
+    background-color: rgba(150, 246, 214, 0.222);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0 0 10px -1px #00ffff;
+    cursor: pointer;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    gap: 6%;
+}
+.skill:hover{
+    transform:rotateY(180deg);
+}
+.educations{
+    padding: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    color: aliceblue;
+}
+.educations h1{
+    text-align: center;
+    padding-bottom:5% ;
+}
+.education-contain{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+.education{
+    width:100%;
+   /* From https://css.glass */
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(3.4px);
+-webkit-backdrop-filter: blur(3.4px);
+border: 1px solid rgba(255, 255, 255, 0.49);
+padding: 2%;
+border-radius: 5px;
+}
+.education:hover{
+    padding-block-start: 3%;
+}
+.edu-course{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+}
+.edu-course p:nth-child(1){
+    font-weight: bold;
+}
+.project-contain h1{
+    text-align: center;
+}
+.project-contain{
+    padding: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+.projects{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap:4%;
+    padding-top: 5%;
+}
+.project{
+    width: 325px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(3.4px);
+    -webkit-backdrop-filter: blur(3.4px);
+    border: 1px solid rgba(255, 255, 255, 0.49);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 4%;
+    
+}
+.project-image:nth-child(1){
+    height: 200px;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+}
+.project-content{
+    height: 50%;
+    width: 100%;
+    padding: 10%;
+}
+.project-content div{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.project-content button{
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid rgb(13, 255, 255);
+    background-color: #00ffff;
+}
+.project-content button:hover{
+    box-shadow: 0 0 30px 5px #e0ffff;
+}
+.contact{
+    display: flex;
+    flex-direction: column;
+    padding: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+.contact-user{
+    width: 50%;
+    padding: 2%;
+    border: 1px solid rgb(233, 233, 233);
+    border-radius: 10px;
+}
+.contact-form input,textarea{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgb(233, 233, 233);
+}
+.contact-title{
+    text-align: center;
+    padding-bottom: 5%;
+}
+.contact-my{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 4%;
+}
+.contact-form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.contact-form .button{
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+.contact-form div{
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start
+}
+.contact-form button{
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid rgb(13, 255, 255);
+    background-color: #00ffff;
+}
+.contact-form button:hover{
+    box-shadow: 0 0 20px 5px #75f7f7;
+}
+.contact-icon{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 5%;
+}
+.contact-icon span{
+    display: block;
+    height: 35px;
+    width: 35px;
+    background-color: #e0ffff;
+    border-radius: 100%;
+}
+.contact-icon p{
+    margin-left: 10px;
+    margin-bottom: 0;
+    align-items: center;
+    display: flex;
+}
+.contact-cover{
+    display: flex;
+}
+.social{
+    justify-content: space-between;
+}
+
+.contact-icon span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 119, 117);
+}
+.contact-icon span:hover{
+    background-color: #00ffff;
+    color: white;
+    box-shadow: 0 0 20px 5px #75f7f7;
+}
+@media only screen and (max-width: 600px) {
+    .profile{
+        flex-direction: column-reverse;
+    }
+    .pro-detail{
+        width: 100%;
+        padding: 10%;
+    }
+    .pro-img{
+        width: 100%;
+        margin-top: 10%;
+        margin-bottom: 10%;
+    }
+    .edu-course{
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    .edu-course p{
+        text-align: center;
+    }
+    .edu-college{
+        text-align: center;
+        font-size: 16px;
+    }
+    .contact-cover{
+        flex-direction: column;
+        align-items: center;
+    }
+    .contact-user{
+        width:100%;
+    }
+    .contact-my{
+        width: 100%;
+    }
+}

@@ -1,0 +1,71 @@
+.navbar {
+    color: aqua;
+    background: rgba(255, 255, 255, 0.06);
+border-bottom-left-radius: 16px;
+border-bottom-right-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(3.4px);
+-webkit-backdrop-filter: blur(3.4px);
+border: 1px solid rgba(255, 255, 255, 0.49);
+
+}
+.navbar a{
+    color: aqua;
+}
+.navbar a:hover{
+    color: whitesmoke;
+}
+.navbar-brand{
+    margin-left: 8%;
+}
+
+.navbar-brand img{
+    width: 140px;
+}
+.navbar-toggler {
+  color:rgb(79 221 186 / 65%);
+}
+.nav-item:after {
+    content: "";
+    display: block;
+    height: 3px;
+    width: 0;
+    background: transparent;
+    transition: width 0.3s ease, background-color 0.5s ease;
+  }
+  
+  .nav-item:hover:after {
+    width: 100%;
+    background: aqua;
+  }
+   
+  @media screen and (max-width: 960px) {
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border-top: 1pxsolid #fff;
+      position: absolute;
+      top: 80px;
+      left: -110%;
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+  
+    .nav-links {
+      padding: 1.5rem;
+      width: 100%;
+      display: table;
+    }
+  
+    .nav-icon {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(-100%, 60%);
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #ffdd40;
+    }
+  }
