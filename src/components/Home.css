@@ -1433,12 +1433,16 @@ border-radius: 5px;
     .contact-cover{
         flex-direction: column;
         align-items: center;
+        gap: 30px;
     }
     .contact-user{
         width:100%;
+        margin-bottom: 0;
     }
     .contact-my{
         width: 100%;
+        margin-top: 20px;
+        padding-left: 0;
     }
 }
 
