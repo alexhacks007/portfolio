@@ -3,7 +3,6 @@ import emailjs from 'emailjs-com';
 import './Home.css'
 import profile from './images/alex.jpg'
 import ToastContainer from './ToastContainer';
-import VisitorTracker from './VisitorTracker';
 
 const TEXTS = ["Fullstack developer", "Frontend Developer", "Backend developer"];
 
