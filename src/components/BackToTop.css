@@ -1,0 +1,55 @@
+.back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000;
+  }
+  
+  .back-to-top-button {
+    background-color:aqua;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease;
+  }
+  .back-to-top-button p{
+    margin: 0;
+  }
+  .back-to-top-button p:hover{
+    margin-bottom: 10px;
+  }
+  
+  .back-to-top-button:hover {
+    background-color: whitesmoke;
+    color: black;
+  }
+  
+  /* Smooth fade-in for the button */
+  .back-to-top-button {
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+  
+  .back-to-top-button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Light Mode Styles */
+  [data-theme="light"] .back-to-top-button {
+    background-color: #0066cc;
+    color: white;
+  }
+
+  [data-theme="light"] .back-to-top-button:hover {
+    background-color: #0052a3;
+    color: white;
+  }
+  

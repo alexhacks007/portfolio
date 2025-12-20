@@ -1,0 +1,135 @@
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 100001;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s ease-out, width 0.2s ease, height 0.2s ease;
+    will-change: transform;
+}
+
+.cursor-outer {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00ffff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    animation: cursorPulse 2s ease-in-out infinite;
+}
+
+.cursor-inner {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #00ffff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+}
+
+.custom-cursor.hover .cursor-outer {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+}
+
+.custom-cursor.hover .cursor-inner {
+    width: 10px;
+    height: 10px;
+    background: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 1);
+}
+
+.custom-cursor-trail {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 255, 255, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100000;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, transform 0.1s ease-out;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    will-change: transform;
+}
+
+.custom-cursor-trail.dark {
+    background: rgba(0, 255, 255, 0.3);
+}
+
+.custom-cursor-trail.light {
+    background: rgba(0, 102, 204, 0.3);
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.6);
+}
+
+@keyframes cursorPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Light Theme Cursor */
+.custom-cursor.light .cursor-outer {
+    border-color: #0066cc;
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+}
+
+.custom-cursor.light .cursor-inner {
+    background: #0066cc;
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.8);
+}
+
+.custom-cursor.light.hover .cursor-outer {
+    border-color: #0066cc;
+    box-shadow: 0 0 20px rgba(0, 102, 204, 0.8);
+}
+
+.custom-cursor.light.hover .cursor-inner {
+    background: #0066cc;
+    box-shadow: 0 0 15px rgba(0, 102, 204, 1);
+}
+
+@keyframes cursorPulseLight {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 102, 204, 0.8);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.custom-cursor.light .cursor-outer {
+    animation: cursorPulseLight 2s ease-in-out infinite;
+}
+
+/* Hide cursor on mobile */
+@media (hover: none) and (pointer: coarse) {
+    .custom-cursor,
+    .custom-cursor-trail {
+        display: none;
+    }
+    
+    body {
+        cursor: auto !important;
+    }
+}
+
