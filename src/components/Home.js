@@ -350,7 +350,7 @@ function Home() {
             </div>
           </div>
           <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.tigren.com/blog/wp-content/uploads/2021/11/ecommerce-design-strategies.png' alt='Ecommerce website using React.js project'></img>
+            <img className='project-image' src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop' alt='Ecommerce website using React.js project'></img>
             <div className='project-content'>
               <p>2024</p>
               <p>ecommerce website using reactjs</p>
