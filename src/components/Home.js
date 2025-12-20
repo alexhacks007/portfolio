@@ -333,39 +333,39 @@ function Home() {
         <h1>PROJECTS</h1>
         <div className='projects'>
           <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.citlprojects.com/hubfs/featured-image/voice-based-email-for-blind-768x480.jpg'></img>
+            <img className='project-image' src='https://www.citlprojects.com/hubfs/featured-image/voice-based-email-for-blind-768x480.jpg' alt='Voice based email system project'></img>
             <div className='project-content'>
               <p>2023</p>
               <p>Voice based email system</p>
               <p>The user can compose an email just by speaking the content and the application will automatically convert it into text. </p>
-              <div><button><a>Github</a></button></div>
+              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
             </div>
           </div>
           <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://ijritcc.org/public/journals/1/submission_7607_7553_coverImage_en_US.png'></img>
+            <img className='project-image' src='https://ijritcc.org/public/journals/1/submission_7607_7553_coverImage_en_US.png' alt='Skin disease detection using deep learning project'></img>
             <div className='project-content'>
               <p>2024</p>
               <p>skin disease detection using deep learning</p>
               <p>This work provides an automated image-based method for diagnosing and categorizing...</p>
-              <div><button><a>Github</a></button></div>
+              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
             </div>
           </div>
           <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.tigren.com/blog/wp-content/uploads/2021/11/ecommerce-design-strategies.png'></img>
+            <img className='project-image' src='https://www.tigren.com/blog/wp-content/uploads/2021/11/ecommerce-design-strategies.png' alt='Ecommerce website using React.js project'></img>
             <div className='project-content'>
               <p>2024</p>
               <p>ecommerce website using reactjs</p>
               <p>A React eCommerce application typically involves building a product listing page, a shopping cart, a checkout page, and a payment...</p>
-              <div><button><a>Github</a></button></div>
+              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
             </div>
           </div>
           <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.hubspot.com/hs-fs/hubfs/interior-design-websites-cathie-hong-interiors.jpg?width=650&height=370&name=interior-design-websites-cathie-hong-interiors.jpg'></img>
+            <img className='project-image' src='https://www.hubspot.com/hs-fs/hubfs/interior-design-websites-cathie-hong-interiors.jpg?width=650&height=370&name=interior-design-websites-cathie-hong-interiors.jpg' alt='Premium interior design website project'></img>
             <div className='project-content'>
               <p>2024</p>
               <p>Premium interior design website</p>
               <p>An interior design website helps you do that. It allows you to reach a broader audience while showcasing your skills as an artist.</p>
-              <div><button><a>Github</a></button></div>
+              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
             </div>
           </div>
         </div>
