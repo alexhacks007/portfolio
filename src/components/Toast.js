@@ -20,12 +20,6 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
 
     return () => clearTimeout(timer);
   }, [duration, handleClose]);
-    setIsExiting(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      if (onClose) onClose();
-    }, 300);
-  };
 
   const getIcon = () => {
     switch (type) {
