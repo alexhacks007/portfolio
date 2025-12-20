@@ -438,7 +438,6 @@ function Home() {
       </div>
       </div>
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <VisitorTracker />
     </Fragment>
   )
 }
