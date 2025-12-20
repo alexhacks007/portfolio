@@ -158,7 +158,7 @@ const Navbar = () => {
     <>
       <nav className={`navbar navbar-expand-lg ${isNavbarVisible ? 'navbar-visible' : 'navbar-hidden'}`}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="#"><img src={logo} alt='logo'></img></a>
+        <a className="navbar-brand" href="/"><img src={logo} alt='logo'></img></a>
         <button
             className={`navbar-toggler ${isSidebarOpen ? 'active' : ''}`}
           type="button"

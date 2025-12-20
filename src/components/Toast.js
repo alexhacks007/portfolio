@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import './Toast.css';
-import { useTheme } from '../context/ThemeContext';
 
 const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
-  const { isDarkMode } = useTheme();
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      if (onClose) onClose();
+    }, 300);
+  }, [onClose]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -13,9 +19,7 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration]);
-
-  const handleClose = () => {
+  }, [duration, handleClose]);
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
