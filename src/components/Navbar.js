@@ -146,8 +146,8 @@ const Navbar = () => {
 
   const handleDownloadCV = () => {
     const link = document.createElement('a');
-    link.href = '/PATCHAIYAPPAN K CV.pdf';
-    link.download = 'PATCHAIYAPPAN K CV.pdf';
+    link.href = '/Alexraj_Python_Fullstack_Developer.pdf';
+    link.download = 'Alexraj_Python_Fullstack_Developer.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -323,7 +323,7 @@ const Navbar = () => {
             </div>
             <div className="cv-modal-content">
               <iframe
-                src="/PATCHAIYAPPAN K CV.pdf"
+                src="/Alexraj_Python_Fullstack_Developer.pdf"
                 title="CV Viewer"
                 className="cv-iframe"
               ></iframe>
