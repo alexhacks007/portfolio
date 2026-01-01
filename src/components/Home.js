@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useEffect, useRef, useCallback } from 'react';
 import emailjs from 'emailjs-com';
 import './Home.css'
 import profile from './images/alex.jpg'
@@ -19,6 +19,56 @@ function Home() {
   const [isVisible, setIsVisible] = useState(true);
   const timeoutRef = useRef(null);
   const [toasts, setToasts] = useState([]);
+  
+  // Skill animation states
+  const [skillPercentages, setSkillPercentages] = useState({
+    python: 0,
+    fastapi: 0,
+    mongodb: 0,
+    postgresql: 0,
+    react: 0,
+    javascript: 0,
+    typescript: 0,
+    git: 0
+  });
+  const [skillsAnimated, setSkillsAnimated] = useState(false);
+
+  // Animate skill percentages
+  const animateSkill = useCallback((skillKey, targetValue, delay = 0) => {
+    const duration = 2000; // 2 seconds
+    const startTime = Date.now() + delay;
+    let animationFrame;
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      
+      if (elapsed < 0) {
+        animationFrame = requestAnimationFrame(animate);
+        return;
+      }
+      
+      if (elapsed >= duration) {
+        setSkillPercentages(prev => ({
+          ...prev,
+          [skillKey]: targetValue
+        }));
+        return;
+      }
+      
+      const progress = elapsed / duration;
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(targetValue * easeOutCubic);
+      
+      setSkillPercentages(prev => ({
+        ...prev,
+        [skillKey]: current
+      }));
+      
+      animationFrame = requestAnimationFrame(animate);
+    };
+    
+    animationFrame = requestAnimationFrame(animate);
+  }, []);
 
   useEffect(() => {
     const currentText = TEXTS[currentTextIndex];
@@ -237,6 +287,19 @@ function Home() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('scroll-visible');
+          
+          // Trigger skill animations when skills section is visible
+          if (entry.target.id === 'skills' && !skillsAnimated) {
+            setSkillsAnimated(true);
+            animateSkill('python', 95, 200);
+            animateSkill('fastapi', 92, 400);
+            animateSkill('mongodb', 88, 600);
+            animateSkill('postgresql', 85, 800);
+            animateSkill('react', 90, 1000);
+            animateSkill('javascript', 88, 1200);
+            animateSkill('typescript', 85, 1400);
+            animateSkill('git', 90, 1600);
+          }
         }
       });
     };
@@ -258,7 +321,7 @@ function Home() {
         }
       });
     };
-  }, []);
+  }, [skillsAnimated]);
 
   return (
     <Fragment>
@@ -290,81 +353,290 @@ function Home() {
         </div>
       </div>
       <div className='skills scroll-section' id='skills' ref={skillsRef}>
-        <div>
-        <h1>My Skills</h1>
-        <div className='skill-contain'>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/python-programming-language-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/javascript-programming-language-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/html-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/css-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/bootstrap-5-logo-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-          <div className='skill' onMouseMove={handleSkillMouseMove} onMouseLeave={handleSkillMouseLeave}><img src='https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/react-js-icon.png' alt='1html' width={"70px"}></img><h6>HTML5</h6></div>
-        </div>
+        <div className='skills-container'>
+          <h1 className='skills-title'>
+            Technical <span className='gradient-text'>Arsenal</span>
+          </h1>
+          <p className='skills-subtitle'>
+            A blend of enterprise reliability and creative flair. Battle-tested in production environments.
+          </p>
+          <div className='skill-contain'>
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-code-slash"></i>
+                </div>
+                <span className='skill-category'>BACKEND</span>
+              </div>
+              <h3 className='skill-name'>Python</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.python}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.python}%`}}></div>
+              </div>
+            </div>
+            
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-server"></i>
+                </div>
+                <span className='skill-category'>BACKEND</span>
+              </div>
+              <h3 className='skill-name'>FastAPI</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.fastapi}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.fastapi}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-database"></i>
+                </div>
+                <span className='skill-category'>BACKEND</span>
+              </div>
+              <h3 className='skill-name'>MongoDB</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.mongodb}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.mongodb}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-database-fill"></i>
+                </div>
+                <span className='skill-category'>BACKEND</span>
+              </div>
+              <h3 className='skill-name'>PostgreSQL</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.postgresql}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.postgresql}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-browser-chrome"></i>
+                </div>
+                <span className='skill-category'>FRONTEND</span>
+              </div>
+              <h3 className='skill-name'>React</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.react}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.react}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-filetype-js"></i>
+                </div>
+                <span className='skill-category'>FRONTEND</span>
+              </div>
+              <h3 className='skill-name'>JavaScript</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.javascript}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.javascript}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-filetype-tsx"></i>
+                </div>
+                <span className='skill-category'>FRONTEND</span>
+              </div>
+              <h3 className='skill-name'>TypeScript</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.typescript}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.typescript}%`}}></div>
+              </div>
+            </div>
+
+            <div className='skill-card'>
+              <div className='skill-card-header'>
+                <div className='skill-icon'>
+                  <i className="bi bi-git"></i>
+                </div>
+                <span className='skill-category'>TOOLS</span>
+              </div>
+              <h3 className='skill-name'>Git & GitHub</h3>
+              <div className='skill-level-info'>
+                <span className='skill-level-label'>SKILL LEVEL</span>
+                <span className='skill-percentage'>{skillPercentages.git}%</span>
+              </div>
+              <div className='skill-progress-bar'>
+                <div className='skill-progress-fill' style={{width: `${skillPercentages.git}%`}}></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className='educations scroll-section' id='educations' ref={educationRef}>
-        <h1>Education</h1>
-        <div className='education-contain'>
-        <div className='education'>
-          <div className='edu-course'>
-            <p>B.E COMPUTER SCIENCE AND ENGINEERING</p>
-            <p>2021-2024</p>
+        <div className='educations-container'>
+          <h1 className='educations-title'>Education</h1>
+          <div className='education-contain'>
+            <div className='education-card'>
+              <div className='education-card-header'>
+                <div className='education-icon'>
+                  <i className="bi bi-mortarboard"></i>
+                </div>
+                <span className='education-type'>DEGREE</span>
+              </div>
+              <h3 className='education-degree'>B.E Computer Science and Engineering</h3>
+              <div className='education-details'>
+                <p className='education-institution'>Jayalakshmi Institute of Technology</p>
+                <p className='education-period'>2021 - 2024</p>
+              </div>
+            </div>
+            
+            <div className='education-card'>
+              <div className='education-card-header'>
+                <div className='education-icon'>
+                  <i className="bi bi-book"></i>
+                </div>
+                <span className='education-type'>DIPLOMA</span>
+              </div>
+              <h3 className='education-degree'>Diploma in Mechanical Engineering</h3>
+              <div className='education-details'>
+                <p className='education-institution'>Shreenivasa Polytechnic College</p>
+                <p className='education-period'>2018 - 2020</p>
+              </div>
+            </div>
+            
+            <div className='education-card'>
+              <div className='education-card-header'>
+                <div className='education-icon'>
+                  <i className="bi bi-award"></i>
+                </div>
+                <span className='education-type'>CERTIFICATE</span>
+              </div>
+              <h3 className='education-degree'>Higher Secondary Certificate</h3>
+              <div className='education-details'>
+                <p className='education-institution'>Government Higher School</p>
+                <p className='education-period'>2017 - 2018</p>
+              </div>
+            </div>
           </div>
-          <p className='edu-college'>Jayalakshmi institute of technology</p>
-        </div>
-        <div className='education'>
-        <div className='edu-course'>
-            <p>DIPLOMA IN MECHANINCAL ENGINEERING</p>
-            <p>2018-2020</p>
-          </div>
-          <p className='edu-college'>Shreenivasa polytechnic college</p>
-        </div>
-        <div className='education'>
-        <div className='edu-course'>
-            <p>HIGHER SECONDARY CERTIFICATE</p>
-            <p>2017-2018</p>
-          </div>
-          <p className='edu-college'>Government Higher School</p>
-        </div>
         </div>
       </div>
       <div className='project-contain scroll-section' id='projects' ref={projectsRef}>
-        <h1>PROJECTS</h1>
-        <div className='projects'>
-          <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.citlprojects.com/hubfs/featured-image/voice-based-email-for-blind-768x480.jpg' alt='Voice based email system project'></img>
-            <div className='project-content'>
-              <p>2023</p>
-              <p>Voice based email system</p>
-              <p>The user can compose an email just by speaking the content and the application will automatically convert it into text. </p>
-              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
+        <div className='projects-container'>
+          <h1 className='projects-title'>Projects</h1>
+          <div className='projects'>
+            <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
+              <div className='project-image-wrapper'>
+                <img className='project-image' src='https://www.citlprojects.com/hubfs/featured-image/voice-based-email-for-blind-768x480.jpg' alt='Voice based email system project'></img>
+              </div>
+              <div className='project-content'>
+                <div className='project-tech-tags'>
+                  <span className='tech-tag'>Python</span>
+                  <span className='tech-tag'>Speech Recognition</span>
+                  <span className='tech-tag'>TTS</span>
+                </div>
+                <h3 className='project-title'>Voice Based Email System</h3>
+                <p className='project-description'>The user can compose an email just by speaking the content and the application will automatically convert it into text.</p>
+                <div className='project-actions'>
+                  <button className='project-btn'>
+                    <a href='https://github.com' target='_blank' rel='noopener noreferrer'>
+                      <i className="bi bi-github"></i> View Code
+                    </a>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://ijritcc.org/public/journals/1/submission_7607_7553_coverImage_en_US.png' alt='Skin disease detection using deep learning project'></img>
-            <div className='project-content'>
-              <p>2024</p>
-              <p>skin disease detection using deep learning</p>
-              <p>This work provides an automated image-based method for diagnosing and categorizing...</p>
-              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
+            
+            <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
+              <div className='project-image-wrapper'>
+                <img className='project-image' src='https://ijritcc.org/public/journals/1/submission_7607_7553_coverImage_en_US.png' alt='Skin disease detection using deep learning project'></img>
+              </div>
+              <div className='project-content'>
+                <div className='project-tech-tags'>
+                  <span className='tech-tag'>Python</span>
+                  <span className='tech-tag'>CNN</span>
+                  <span className='tech-tag'>Deep Learning</span>
+                </div>
+                <h3 className='project-title'>Skin Disease Detection using Deep Learning</h3>
+                <p className='project-description'>This work provides an automated image-based method for diagnosing and categorizing skin diseases using CNN.</p>
+                <div className='project-actions'>
+                  <button className='project-btn'>
+                    <a href='https://github.com' target='_blank' rel='noopener noreferrer'>
+                      <i className="bi bi-github"></i> View Code
+                    </a>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop' alt='Ecommerce website using React.js project'></img>
-            <div className='project-content'>
-              <p>2024</p>
-              <p>ecommerce website using reactjs</p>
-              <p>A React eCommerce application typically involves building a product listing page, a shopping cart, a checkout page, and a payment...</p>
-              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
+            
+            <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
+              <div className='project-image-wrapper'>
+                <img className='project-image' src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop' alt='Ecommerce website using React.js project'></img>
+              </div>
+              <div className='project-content'>
+                <div className='project-tech-tags'>
+                  <span className='tech-tag'>React</span>
+                  <span className='tech-tag'>JavaScript</span>
+                  <span className='tech-tag'>Node.js</span>
+                </div>
+                <h3 className='project-title'>Ecommerce Website using React.js</h3>
+                <p className='project-description'>A React eCommerce application with product listing, shopping cart, checkout page, and payment integration.</p>
+                <div className='project-actions'>
+                  <button className='project-btn'>
+                    <a href='https://github.com' target='_blank' rel='noopener noreferrer'>
+                      <i className="bi bi-github"></i> View Code
+                    </a>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='project' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
-            <img className='project-image' src='https://www.hubspot.com/hs-fs/hubfs/interior-design-websites-cathie-hong-interiors.jpg?width=650&height=370&name=interior-design-websites-cathie-hong-interiors.jpg' alt='Premium interior design website project'></img>
-            <div className='project-content'>
-              <p>2024</p>
-              <p>Premium interior design website</p>
-              <p>An interior design website helps you do that. It allows you to reach a broader audience while showcasing your skills as an artist.</p>
-              <div><button><a href='https://github.com' target='_blank' rel='noopener noreferrer'>Github</a></button></div>
+            
+            <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
+              <div className='project-image-wrapper'>
+                <img className='project-image' src='https://www.hubspot.com/hs-fs/hubfs/interior-design-websites-cathie-hong-interiors.jpg?width=650&height=370&name=interior-design-websites-cathie-hong-interiors.jpg' alt='Premium interior design website project'></img>
+              </div>
+              <div className='project-content'>
+                <div className='project-tech-tags'>
+                  <span className='tech-tag'>React</span>
+                  <span className='tech-tag'>TypeScript</span>
+                  <span className='tech-tag'>CSS</span>
+                </div>
+                <h3 className='project-title'>Premium Interior Design Website</h3>
+                <p className='project-description'>An interior design website that helps reach a broader audience while showcasing skills as an artist.</p>
+                <div className='project-actions'>
+                  <button className='project-btn'>
+                    <a href='https://github.com' target='_blank' rel='noopener noreferrer'>
+                      <i className="bi bi-github"></i> View Code
+                    </a>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
