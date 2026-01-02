@@ -37,13 +37,12 @@ function Home() {
   const animateSkill = useCallback((skillKey, targetValue, delay = 0) => {
     const duration = 2000; // 2 seconds
     const startTime = Date.now() + delay;
-    let animationFrame;
     
     const animate = () => {
       const elapsed = Date.now() - startTime;
       
       if (elapsed < 0) {
-        animationFrame = requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
         return;
       }
       
@@ -64,10 +63,10 @@ function Home() {
         [skillKey]: current
       }));
       
-      animationFrame = requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
     };
     
-    animationFrame = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }, []);
 
   useEffect(() => {
@@ -194,27 +193,6 @@ function Home() {
       });
   };
 
-  // Cursor-based tilt animation for skill cards
-  const handleSkillMouseMove = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
-    const rotateY = ((x - centerX) / centerX) * 10; // Max 10 degrees
-    
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-  };
-
-  const handleSkillMouseLeave = (e) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-  };
-
   // Cursor-based tilt animation for project cards
   const handleProjectMouseMove = (e) => {
     const card = e.currentTarget;
@@ -321,7 +299,7 @@ function Home() {
         }
       });
     };
-  }, [skillsAnimated]);
+  }, [skillsAnimated, animateSkill]);
 
   return (
     <Fragment>
