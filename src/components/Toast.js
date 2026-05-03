@@ -1,25 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import './Toast.css';
 
 const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isExiting, setIsExiting] = useState(false);
-
-  const handleClose = useCallback(() => {
-    setIsExiting(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      if (onClose) onClose();
-    }, 300);
-  }, [onClose]);
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      handleClose();
+      if (onClose) onClose();
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration, handleClose]);
+  }, [duration, onClose]);
 
   const getIcon = () => {
     switch (type) {
@@ -36,18 +26,22 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
     }
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className={`toast-container ${isExiting ? 'toast-exit' : 'toast-enter'} ${type}`}>
+    <motion.div 
+      className={`toast-container ${type}`}
+      initial={{ opacity: 0, x: 100, scale: 0.8 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      layout
+    >
       <div className="toast-content">
         <div className="toast-icon">{getIcon()}</div>
         <div className="toast-message">{message}</div>
-        <button className="toast-close" onClick={handleClose} aria-label="Close">
+        <button className="toast-close" onClick={onClose} aria-label="Close">
           <i className="bi bi-x"></i>
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

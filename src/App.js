@@ -11,6 +11,7 @@ import BackToTop from './components/BackToTop';
 import AnimatedBackground from './components/AnimatedBackground';
 import CustomCursor from './components/CustomCursor';
 import { ThemeProvider } from './context/ThemeContext';
+import ScrollProgress from './components/ScrollProgress';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <CustomCursor />
       <AnimatedBackground />
     <BrowserRouter>
+    <ScrollProgress />
     <Navbar/>
     <Routes>
       <Route index element={<Home/>} />

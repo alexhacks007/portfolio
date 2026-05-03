@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import emailjs from 'emailjs-com';
 import './Home.css'
 import profile from './images/alex.jpg'
@@ -19,7 +20,7 @@ function Home() {
   const [isVisible, setIsVisible] = useState(true);
   const timeoutRef = useRef(null);
   const [toasts, setToasts] = useState([]);
-  
+
   // Skill animation states
   const [skillPercentages, setSkillPercentages] = useState({
     python: 0,
@@ -37,15 +38,15 @@ function Home() {
   const animateSkill = useCallback((skillKey, targetValue, delay = 0) => {
     const duration = 2000; // 2 seconds
     const startTime = Date.now() + delay;
-    
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      
+
       if (elapsed < 0) {
         requestAnimationFrame(animate);
         return;
       }
-      
+
       if (elapsed >= duration) {
         setSkillPercentages(prev => ({
           ...prev,
@@ -53,25 +54,25 @@ function Home() {
         }));
         return;
       }
-      
+
       const progress = elapsed / duration;
       const easeOutCubic = 1 - Math.pow(1 - progress, 3);
       const current = Math.round(targetValue * easeOutCubic);
-      
+
       setSkillPercentages(prev => ({
         ...prev,
         [skillKey]: current
       }));
-      
+
       requestAnimationFrame(animate);
     };
-    
+
     requestAnimationFrame(animate);
   }, []);
 
   useEffect(() => {
     const currentText = TEXTS[currentTextIndex];
-    
+
     const handleTyping = () => {
       if (!isDeleting) {
         // Typing forward
@@ -108,7 +109,7 @@ function Home() {
     if (isVisible) {
       timeoutRef.current = setTimeout(handleTyping, 100);
     }
-    
+
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -173,14 +174,14 @@ function Home() {
         (error) => {
           console.error('Error sending email:', error);
           let errorMessage = 'Failed to send message. Please try again.';
-          
+
           // Provide more specific error messages
           if (error.text && error.text.includes('Invalid grant')) {
             errorMessage = 'Email service configuration error. Please contact the website administrator.';
           } else if (error.text && error.text.includes('Gmail_API')) {
             errorMessage = 'Email service needs to be reconfigured. Please contact the website administrator.';
           }
-          
+
           showToast(errorMessage, 'error', 5000);
         }
       )
@@ -197,42 +198,50 @@ function Home() {
   const handleProjectMouseMove = (e) => {
     const card = e.currentTarget;
     if (!card) return;
-    
+
     // Stop any ongoing animations
     card.style.animation = 'none';
-    
+
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
+
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
+
     // Calculate normalized position (-1 to 1)
     const normalizedX = (x - centerX) / centerX;
     const normalizedY = (y - centerY) / centerY;
-    
+
     // Tilt effect - pronounced 3D rotation
     const rotateX = normalizedY * -15; // Max 15 degrees tilt
     const rotateY = normalizedX * 15; // Max 15 degrees tilt
-    
+
     // Scale effect when hovering
     const scale = 1.05;
-    
+
     // Apply transform with smooth tilt effect - no transition during mouse move for instant response
     card.style.transition = 'none';
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${scale}, ${scale}, ${scale})`;
     card.style.zIndex = '10';
+
+    // Spotlight effect variables
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
   };
 
   const handleProjectMouseLeave = (e) => {
     const card = e.currentTarget;
     if (!card) return;
-    
+
     // Smooth return to original position
     card.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
     card.style.zIndex = '1';
+
+    // Reset spotlight
+    card.style.setProperty('--mouse-x', `-1000px`);
+    card.style.setProperty('--mouse-y', `-1000px`);
   };
 
   // Scroll animation refs
@@ -247,7 +256,7 @@ function Home() {
     e.preventDefault();
     const contactSection = document.getElementById('contacts');
     if (contactSection) {
-      contactSection.scrollIntoView({ 
+      contactSection.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -265,7 +274,7 @@ function Home() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('scroll-visible');
-          
+
           // Trigger skill animations when skills section is visible
           if (entry.target.id === 'skills' && !skillsAnimated) {
             setSkillsAnimated(true);
@@ -303,43 +312,158 @@ function Home() {
 
   return (
     <Fragment>
-      <div className='profile' id='profile'>
+      <motion.div
+        className='profile'
+        id='profile'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <div className='pro-detail'>
-          <h1>Hi, I'm Alexraj</h1>
-          <h3 className={`typewriter-text ${isVisible ? 'visible' : 'hidden'}`}>
+          <motion.h1
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 100, damping: 10, delay: 0.2 }}
+          >
+            Hi, I'm Alexraj
+          </motion.h1>
+          <motion.h3
+            className={`typewriter-text ${isVisible ? 'visible' : 'hidden'}`}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             {displayText}
             <span className="cursor">|</span>
-          </h3>
-          <p>I am an enthusiastic, self-motivated, reliable, responsible and hard working person. I am a mature team worker and adaptable to all challenging situations. I am able to work well both in a team environment as well as using own initiative. I am able to work well under pressure and adhere to strict deadlines.</p>
-          <button onClick={handleContactMeClick}>Contact Me</button>
+          </motion.h3>
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            I'm a passionate Fullstack Developer specializing in building scalable web applications and high-performance backend systems. With a strong foundation in Python, React, and modern databases, I transform complex technical challenges into elegant, user-centric solutions. Explore my work below to see how I bring ideas to life.
+          </motion.p>
+          <motion.button
+            onClick={handleContactMeClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, delay: 0.8 }}
+          >
+            Contact Me
+          </motion.button>
         </div>
-        <div className='pro-img'>
+        <motion.div
+          className='pro-img'
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            delay: 0.5
+          }}
+        >
           <div className="profile-animation-wrapper">
-            <div className="rotating-ring ring-1"></div>
-            <div className="rotating-ring ring-2"></div>
-          <span><img src={profile} alt='profile'></img></span>
+            <motion.div
+              className="rotating-ring ring-1"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            ></motion.div>
+            <motion.div
+              className="rotating-ring ring-2"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            ></motion.div>
+            <motion.span
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            ><img src={profile} alt='profile'></img></motion.span>
           </div>
-        </div>
-      </div>
-      <div className='about scroll-section' id='about' ref={aboutRef}>
-        <div>
-        <h1>About Me</h1>
-        <h5>Fullstack Developer</h5>
-        <p>I am an enthusiastic, self-motivated, reliable, responsible and hard working person. I am a mature team worker and adaptable to all challenging situations. I am able to work well both in a team environment as well as using own initiative. I am able to work well under pressure and adhere to strict deadlines.
-        I am an enthusiastic, self-motivated, reliable, responsible and hard working person. I am a mature team worker and adaptable to all challenging situations. I am able to work well both in a team environment as well as using own initiative. I am able to work well under pressure and adhere to strict deadlines
-        </p>
-        </div>
-      </div>
-      <div className='skills scroll-section' id='skills' ref={skillsRef}>
-        <div className='skills-container'>
-          <h1 className='skills-title'>
-            Technical <span className='gradient-text'>Arsenal</span>
-          </h1>
-          <p className='skills-subtitle'>
-            A blend of enterprise reliability and creative flair. Battle-tested in production environments.
+        </motion.div>
+      </motion.div>
+      <motion.div
+        className='about scroll-section'
+        id='about'
+        ref={aboutRef}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <h1>About Me</h1>
+          <h5>Fullstack Developer</h5>
+          <p>
+            Beyond writing clean and efficient code, I am deeply committed to crafting software architectures that stand the test of time. My expertise bridges the gap between beautiful frontend interfaces using React and robust, data-intensive backend APIs using Python and FastAPI.
+            <br /><br />
+            I thrive in high-stakes environments, consistently delivering optimized solutions even under tight deadlines. Whether collaborating within dynamic, agile teams or taking the initiative to lead independent modules, my engineering philosophy revolves around adaptability, continuous learning, and an unwavering focus on performance. I don't just build applications; I engineer reliable digital experiences.
           </p>
-          <div className='skill-contain'>
-            <div className='skill-card'>
+        </motion.div>
+      </motion.div>
+      <motion.div
+        className='skills scroll-section'
+        id='skills'
+        ref={skillsRef}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1 }}
+      >
+        <div className='skills-container'>
+          <motion.h1
+            className='skills-title'
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Technical <span className='gradient-text'>Arsenal</span>
+          </motion.h1>
+          <motion.p
+            className='skills-subtitle'
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            A blend of enterprise reliability and creative flair. Battle-tested in production environments.
+          </motion.p>
+          <motion.div
+            className='skill-contain'
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+          >
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-code-slash"></i>
@@ -352,11 +476,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.python}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.python}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.python}%` }}></div>
               </div>
-            </div>
-            
-            <div className='skill-card'>
+            </motion.div>
+
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-server"></i>
@@ -369,11 +500,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.fastapi}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.fastapi}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.fastapi}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-database"></i>
@@ -386,11 +524,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.mongodb}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.mongodb}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.mongodb}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-database-fill"></i>
@@ -403,11 +548,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.postgresql}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.postgresql}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.postgresql}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-browser-chrome"></i>
@@ -420,11 +572,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.react}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.react}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.react}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-filetype-js"></i>
@@ -437,11 +596,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.javascript}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.javascript}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.javascript}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-filetype-tsx"></i>
@@ -454,11 +620,18 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.typescript}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.typescript}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.typescript}%` }}></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='skill-card'>
+            <motion.div
+              className='skill-card'
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                show: { y: 0, opacity: 1 }
+              }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
               <div className='skill-card-header'>
                 <div className='skill-icon'>
                   <i className="bi bi-git"></i>
@@ -471,13 +644,21 @@ function Home() {
                 <span className='skill-percentage'>{skillPercentages.git}%</span>
               </div>
               <div className='skill-progress-bar'>
-                <div className='skill-progress-fill' style={{width: `${skillPercentages.git}%`}}></div>
+                <div className='skill-progress-fill' style={{ width: `${skillPercentages.git}%` }}></div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
-      <div className='educations scroll-section' id='educations' ref={educationRef}>
+      </motion.div>
+      <motion.div
+        className='educations scroll-section'
+        id='educations'
+        ref={educationRef}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className='educations-container'>
           <h1 className='educations-title'>Education</h1>
           <div className='education-contain'>
@@ -494,7 +675,7 @@ function Home() {
                 <p className='education-period'>2021 - 2024</p>
               </div>
             </div>
-            
+
             <div className='education-card'>
               <div className='education-card-header'>
                 <div className='education-icon'>
@@ -508,7 +689,7 @@ function Home() {
                 <p className='education-period'>2018 - 2020</p>
               </div>
             </div>
-            
+
             <div className='education-card'>
               <div className='education-card-header'>
                 <div className='education-icon'>
@@ -524,8 +705,16 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
-      <div className='project-contain scroll-section' id='projects' ref={projectsRef}>
+      </motion.div>
+      <motion.div
+        className='project-contain scroll-section'
+        id='projects'
+        ref={projectsRef}
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className='projects-container'>
           <h1 className='projects-title'>Projects</h1>
           <div className='projects'>
@@ -550,7 +739,7 @@ function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
               <div className='project-image-wrapper'>
                 <img className='project-image' src='https://ijritcc.org/public/journals/1/submission_7607_7553_coverImage_en_US.png' alt='Skin disease detection using deep learning project'></img>
@@ -572,7 +761,7 @@ function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
               <div className='project-image-wrapper'>
                 <img className='project-image' src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop' alt='Ecommerce website using React.js project'></img>
@@ -594,7 +783,7 @@ function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div className='project-card' onMouseMove={handleProjectMouseMove} onMouseLeave={handleProjectMouseLeave}>
               <div className='project-image-wrapper'>
                 <img className='project-image' src='https://www.hubspot.com/hs-fs/hubfs/interior-design-websites-cathie-hong-interiors.jpg?width=650&height=370&name=interior-design-websites-cathie-hong-interiors.jpg' alt='Premium interior design website project'></img>
@@ -618,75 +807,83 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
-      <div className='contact scroll-section' id='contacts' ref={contactRef}>
+      </motion.div>
+      <motion.div
+        className='contact scroll-section'
+        id='contacts'
+        ref={contactRef}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className='contact-title'><h1>CONTACT</h1></div>
         <div className='contact-cover'>
-        <div className='contact-user'>
-          <p>If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests.</p>
-          <form onSubmit={sendEmail} className='contact-form'>
-      <div>
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label>Message</label>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className='button'><button type="submit"><span>Send Message</span></button></div>
-    </form>
-        </div>
-        <div className='contact-my'>
-          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=theapakalex@gmail.com" target="_blank" rel="noopener noreferrer" className='contact-icon'>
-            <span><i className="bi bi-envelope-at"></i></span>
-            <p>theapakalex@gmail.com</p>
-          </a>
-          <a href="tel:+916382900549" className='contact-icon'>
-            <span><i className="bi bi-telephone"></i></span>
-            <p>6382900549</p>
-          </a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Bangalore,India" target="_blank" rel="noopener noreferrer" className='contact-icon'>
-            <span><i className="bi bi-house"></i></span>
-            <p>Bangalore,India</p>
-          </a>
-          <div className='contact-icon social'>
-            <a href="https://www.instagram.com/a.l.e.x_._j.s.t?igsh=MWxlOTg4aGZxMDF5Zw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <span><i className="bi bi-instagram"></i></span>
-            </a>
-            <a href="https://www.linkedin.com/in/alexraj2000" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <span><i className="bi bi-linkedin"></i></span>
-            </a>
-            <a href="https://github.com/alexhacks007" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <span><i className="bi bi-github"></i></span>
-            </a>
-            <a href="https://wa.me/916382900549" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-              <span><i className="bi bi-whatsapp"></i></span>
-            </a>
+          <div className='contact-user'>
+            <p>If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests.</p>
+            <form onSubmit={sendEmail} className='contact-form'>
+              <div>
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Message</label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className='button'><button type="submit"><span>Send Message</span></button></div>
+            </form>
+          </div>
+          <div className='contact-my'>
+            <motion.a whileHover={{ scale: 1.1, y: -5 }} whileTap={{ scale: 0.9 }} href="https://mail.google.com/mail/?view=cm&fs=1&to=theapakalex@gmail.com" target="_blank" rel="noopener noreferrer" className='contact-icon'>
+              <span><i className="bi bi-envelope-at"></i></span>
+              <p>theapakalex@gmail.com</p>
+            </motion.a>
+            <motion.a whileHover={{ scale: 1.1, y: -5 }} whileTap={{ scale: 0.9 }} href="tel:+916382900549" className='contact-icon'>
+              <span><i className="bi bi-telephone"></i></span>
+              <p>6382900549</p>
+            </motion.a>
+            <motion.a whileHover={{ scale: 1.1, y: -5 }} whileTap={{ scale: 0.9 }} href="https://www.google.com/maps/search/?api=1&query=Bangalore,India" target="_blank" rel="noopener noreferrer" className='contact-icon'>
+              <span><i className="bi bi-house"></i></span>
+              <p>Bangalore,India</p>
+            </motion.a>
+            <div className='contact-icon social'>
+              <motion.a whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.9 }} href="https://www.instagram.com/a.l.e.x_._j.s.t?igsh=MWxlOTg4aGZxMDF5Zw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <span><i className="bi bi-instagram"></i></span>
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.2, rotate: -5 }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/alexraj2000" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <span><i className="bi bi-linkedin"></i></span>
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.2, rotate: 5 }} whileTap={{ scale: 0.9 }} href="https://github.com/alexhacks007" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <span><i className="bi bi-github"></i></span>
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.2, rotate: -5 }} whileTap={{ scale: 0.9 }} href="https://wa.me/916382900549" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                <span><i className="bi bi-whatsapp"></i></span>
+              </motion.a>
+            </div>
           </div>
         </div>
-      </div>
-      </div>
+      </motion.div>
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </Fragment>
   )
